@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    
+    <h2>Rediģēt vārdu: </h2>
+    <form action="" method="post">
+        <input type="text" name="name" value="{{ name }}" required>
+        <button type="submit">Saglabāt</button>
+    </form>
+
+    <br>
+
+    <a href="/vardi">Atpakaļ uz sarakstu</a>
+
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <h2>ievadiet vārdu</h2>
+    <form action="/submit" method="post">
+        <input type="text" name="name" required>
+        <button type="submit">Saglabāt</button>
+    </form>
+
+{% endblock %}

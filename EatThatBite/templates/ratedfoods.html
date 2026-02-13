@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+    <h2>Ievadītie vārdi:</h2>
+    {%if rows %}
+    <table>
+        <thead>
+            <tr>
+                <th>Vārds</th>
+                <th>Rediģēt</th>
+                <th>Dzēst</th>
+            </tr>
+        </thead>
+        {% for name in rows %}
+        <tr>
+            <td>{{ name[1] }}</td>
+            <td><a href="/rediget/{{ name[0] }}" onclick="return confirm('Piekrīti, ka šis vārds tiks rediģēts? ')">✏️</a></td>
+            <td><a href="/dzest/{{ name[0] }}" onclick="return confirm('Piekrīti, ka šis vārds tiks dzēsts? ')">🗑️</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>Datubāzē vēl nav neviena vārda</p>
+    {% endif %}
+    
+    <br>
+    <a href="/">Atpakaļ uz sākuma lapu</a>
+    
+{% endblock %}
