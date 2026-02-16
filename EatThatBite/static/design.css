@@ -13,3 +13,25 @@ a:link{
     height:auto;
     max-width: 50%;
 }
+
+/* Zvaigznes lai uzliktu rating */
+.star-rating {
+    direction: rtl;
+    display: inline-flex;
+}
+
+.star-rating input{
+    display:none;
+}
+
+.star-rating label{
+    font-size: 2rem;
+    color:#ddd;
+    cursor:pointer
+}
+
+.star-rating input:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label{
+    color:#ffc107;
+}
