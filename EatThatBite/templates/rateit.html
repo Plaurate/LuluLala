@@ -2,10 +2,23 @@
 
 {% block body %}
 
-    <h2>ievadiet vārdu</h2>
-    <form action="/submit" method="post">
-        <input type="text" name="name" required>
-        <button type="submit">Saglabāt</button>
-    </form>
+<h2>Novērtē ēdienu</h2>
+
+<form method="post">
+    <input type="text" name="food" placeholder="Ēdiena nosaukums" required>
+
+    <div class="mb-3">
+        <div class="star-rating">
+            {% for i in range(5, 0, -1) %}
+            <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}">
+            <label for="star{{ i }}">
+                <i class="bi bi-star-fill"></i>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    <button type="submit">Saglabāt</button>
+</form>
 
 {% endblock %}
