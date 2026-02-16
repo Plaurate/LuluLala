@@ -8,21 +8,34 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return render_template("index.html")   
-
 #Datu saglabāšana
-@app.route("/submit", methods=["POST"])
+@app.route("/submit", methods=["GET", "POST"])
 def submit():
     if request.method == "POST":
-        name = request.form["name"]   #iegūst ievadīto vārdu no formas
-        if name: #pārbauda vai nav tukšs
+        email = request.form["email"]  #iegūst ievadīto vārdu no formas
+        password = request.form["password"]
+        if email and password: #pārbauda vai nav tukšs
             conn = sqlite3.connect("./database.db")
-            conn.execute("INSERT INTO users (name) VALUES (?)", (name,))
-            conn.commit()
-            conn.close()
+            cur = conn.cursor()
+            cur.execute("SELECT email, password FROM users WHERE email=?", (email, ))
+            data = cur.fetchall()
+            if not data:
+                conn.execute("INSERT INTO users (email, password) VALUES (?, ?)", (email, password))
+                conn.commit()
+                conn.close()
+                return redirect("/rateit")  # ierakstīti jaunie dati, ar tiem sūta tālāk
+            elif data[0][1] != password:
+                conn.close()
+                return render_template("index.html", error="Password is incorrect")
+            else:
+                conn.close()
+                return redirect("/rateit")  # pārbaudītie dati ir pareizi, atgriež uz nākamo lapu
 
-        return redirect("/")  # pēc datu saglabāšanas atgriežas uz sākuma lapu
     
-
+@app.route("/rateit")
+def rateit():
+    return render_template("rateit.html")
+    
 @app.route("/vardi")
 def show_names():
     conn = sqlite3.connect("./database.db")
@@ -64,4 +77,5 @@ def edit_name(id):
             return "Ieraksts nav atrasts", 404
 
 if __name__ == "__main__":
+
     app.run(debug=True)
