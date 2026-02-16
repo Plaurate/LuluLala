@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return render_template("index.html")   
-    
+
 #Datu saglabāšana
 @app.route("/submit", methods=["GET", "POST"])
 def submit():
@@ -35,8 +35,15 @@ def submit():
     
 @app.route("/rateit")
 def rateit():
+    rating = request.form.get("rating")
+    user_id = 1
+    food_id = 2
+    conn = sqlite3.connect("./database.db")
+    conn.execute("INSERT INTO ratings (user_id, food_id, rating) VALUES (?, ?, ?)", (user_id, food_id, rating))
+    conn.commit()
+    conn.close()
     return render_template("rateit.html")
-    
+
 @app.route("/ratedfoods")
 def show_names():
     conn = sqlite3.connect("./database.db")
@@ -78,7 +85,6 @@ def edit_name(id):
             return "Ieraksts nav atrasts", 404
 
 if __name__ == "__main__":
-
     app.run(debug=True)
 
 
