@@ -37,14 +37,14 @@ def submit():
 def rateit():
     return render_template("rateit.html")
     
-@app.route("/vardi")
+@app.route("/ratedfoods")
 def show_names():
     conn = sqlite3.connect("./database.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT id, name FROM users")
+    cursor.execute("SELECT foods.id, foods.name, foods.country, foods.image, ratings.user_id, ratings.food_id, ratings.rating FROM foods INNER JOIN ratings ON foods.id = ratings.food_id INNER JOIN users ON users.id = ratings.user_id WHERE ratings.user_id = users.id")
     names = cursor.fetchall()
     conn.close()
-    return render_template("vardi.html", names=names)
+    return render_template("ratedfoods.html", rows=names)
 
 @app.route("/dzest/<int:id>")
 def delete_name(id):
@@ -80,4 +80,5 @@ def edit_name(id):
 if __name__ == "__main__":
 
     app.run(debug=True)
+
 
