@@ -2,23 +2,65 @@
 
 {% block body %}
 
-<h2>Novērtē ēdienu</h2>
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+        <div class="logo1">
+            <img src="../static/logo_short.png" alt="Logo">
+        </div>
 
-<form method="post">
-    <input type="text" name="food" placeholder="Ēdiena nosaukums" required>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="mb-3">
-        <div class="star-rating">
-            {% for i in range(5, 0, -1) %}
-            <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}">
-            <label for="star{{ i }}">
-                <i class="bi bi-star-fill"></i>
-            </label>
-            {% endfor %}
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('rateit') }}">Rate the foods!</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('show_names') }}">See your ratings</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('stats') }}">Statistics</a></li>
+            </ul>
         </div>
     </div>
+</nav>
 
-    <button type="submit">Saglabāt</button>
+<h2 class="text-outline">Rate it! Hate it?</h2>
+<h3 class="subtitle text-outline">— then don't make it!</h3>
+
+<!-- Country selector -->
+<form action="/rateit" method="post">
+    <select name="country" required>
+        <option selected disabled>Choose a country...</option>
+        {% for country in countries %}
+            <option value="{{ country }}">{{ country }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Submit</button>
 </form>
+
+{% if meal %}
+<div class="rate-card">
+    <img src="{{ food_image }}" alt="Image of the food">
+
+    <h3 class="food-title">{{ name_food }}</h3>
+
+    <form action="/rateit" method="post">
+        <input type="hidden" name="food_id" value="{{ food_id }}">
+
+        <div class="star-rating">
+            {% for i in range(5, 0, -1) %}
+                <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}" required>
+                <label for="star{{ i }}">★</label>
+            {% endfor %}
+        </div>
+        <br>
+        <button type="submit" class="rate-btn">Rate it!</button>
+    </form>
+</div>
+{% endif %}
+
+{% if finished %}
+    <h2>All foods for this country have been rated</h2>
+{% endif %}
+
 
 {% endblock %}
