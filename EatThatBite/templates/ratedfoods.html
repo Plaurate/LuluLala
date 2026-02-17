@@ -1,30 +1,88 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+        <!-- Logo -->
+        <div class="logo1">
+            <img src="../static/logo_short.png" alt="Logo">
+        </div>
 
-    <h2>Ievadītie vārdi:</h2>
-    {%if rows %}
-    <table>
-        <thead>
-            <tr>
-                <th>Vārds</th>
-                <th>Rediģēt</th>
-                <th>Dzēst</th>
-            </tr>
-        </thead>
-        {% for name in rows %}
-        <tr>
-            <td>{{ name[1] }}</td>
-            <td><a href="/rediget/{{ name[0] }}" onclick="return confirm('Piekrīti, ka šis vārds tiks rediģēts? ')">✏️</a></td>
-            <td><a href="/dzest/{{ name[0] }}" onclick="return confirm('Piekrīti, ka šis vārds tiks dzēsts? ')">🗑️</a></td>
-        </tr>
+        <!-- Hamburger toggler (always visible) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu items -->
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('rateit') }}">Rate the foods!</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('show_names') }}">See your ratings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('stats') }}">Statistics</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+
+<h2>Search by country</h2>
+
+<!-- Country filter -->
+<form action="/ratedfoods" method="post">
+    <select name="country" required>
+        <option value="" selected disabled>Choose a country...</option>
+        {% for country in countries %}
+            <option value="{{ country }}">{{ country }}</option>
         {% endfor %}
-    </table>
+    </select>
+    <button type="submit">Submit!</button>
+</form>
+<div class="food-list">
+    {% if rows %}
+        <table>
+            <tbody>
+                {% for food in rows %}
+                <tr>
+                    <!-- Image -->
+                    <td>
+                        <img src="{{ food[3] }}" alt="{{ food[1] }}">
+                    </td>
+
+                    <!-- Name + Stars stacked vertically -->
+                    <td class="food-info">
+                        <div class="food-name" style="font-size: 1.3em">{{ food[1] }}</div>
+                        <div class="starstar" style="font-size: 1.3em">
+                            {% set rating = food[4]|int %}
+                            {% for i in range(1, 6) %}
+                                {% if i <= rating %}
+                                    ★
+                                {% else %}
+                                    ☆
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </td>
+
+                    <!-- Edit link -->
+                    <td class="edit-cell">
+                        <a href="/rediget/{{ food[0] }}" onclick="return confirm('Are you sure you want to edit this food?')">✏️</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% else %}
-    <p>Datubāzē vēl nav neviena vārda</p>
+        <p>You have not rated any foods yet.</p>
     {% endif %}
-    
-    <br>
-    <a href="/">Atpakaļ uz sākuma lapu</a>
-    
+</div>
+
 {% endblock %}
