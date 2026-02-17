@@ -1,0 +1,156 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+        <!-- Logo -->
+        <div class="logo1">
+            <img src="../static/logo_short.png" alt="Logo">
+        </div>
+
+        <!-- Hamburger toggler (always visible) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu items -->
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('rateit') }}">Rate the foods!</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('show_names') }}">See your ratings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('stats') }}">Statistics</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+
+
+
+
+
+
+
+<div class="container my-5 stats-page">
+
+    <h2 class="section-title text-outline">Personal:</h2>
+
+    <!-- Personal best ēdieni -->
+    <div class="stats-card">
+        <h5 class="card-title-custom">The absolute favorite food (or foods)</h5>
+
+        {% if personal_foods %}
+            {% for food in personal_foods %}
+                <div class="food-row">
+                    <img src="{{ food.image }}" alt="{{ food.name }}">
+                    <div>
+                        <div class="food-name">{{ food.name }}</div>
+                        <div class="stars">
+                            {% for i in range(1,6) %}
+                                {% if i <= food.rating_display %}
+                                    <i class="bi bi-star-fill starstar"></i>
+                                {% else %}
+                                    <i class="bi bi-star starstar"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No data was collected</p>
+        {% endif %}
+    </div>
+
+    <!-- Personal best valstis -->
+    <div class="stats-card">
+        <h5 class="card-title-custom">The absolute favorite country by food</h5>
+
+        {% if personal_countries %}
+            {% for c in personal_countries %}
+                <div class="country-block">
+                    <div class="country-name">{{ c.country }}</div>
+                    <div class="avg-text">With the average rating:</div>
+                    <div class="stars">
+                        {% for i in range(1,6) %}
+                            {% if i <= c.avg_rounded %}
+                                <i class="bi bi-star-fill starstar"></i>
+                            {% else %}
+                                <i class="bi bi-star starstar"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No data was collected</p>
+        {% endif %}
+    </div>
+
+    <h2 class="section-title text-outline">Worldwide:</h2>
+
+    <!-- Best ēdieni -->
+    <div class="stats-card">
+        <h5 class="card-title-custom">The absolute favorite food (or foods)</h5>
+
+        {% if world_foods %}
+            {% for food in world_foods %}
+                <div class="food-row">
+                    <img src="{{ food.image }}" alt="{{ food.name }}">
+                    <div>
+                        <div class="food-name">{{ food.name }}</div>
+                        <div class="stars">
+                            {% for i in range(1,6) %}
+                                {% if i <= food.avg_rounded %}
+                                    <i class="bi bi-star-fill starstar"></i>
+                                {% else %}
+                                    <i class="bi bi-star starstar"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No data was collected</p>
+        {% endif %}
+    </div>
+
+    <!-- Best valstis -->
+    <div class="stats-card">
+        <h5 class="card-title-custom">The absolute favorite country by food</h5>
+
+        {% if world_countries %}
+            {% for c in world_countries %}
+                <div class="country-block">
+                    <div class="country-name">{{ c.country }}</div>
+                    <div class="avg-text">With the average rating:</div>
+                    <div class="stars">
+                        {% for i in range(1,6) %}
+                            {% if i <= c.avg_rounded %}
+                                <i class="bi bi-star-fill starstar"></i>
+                            {% else %}
+                                <i class="bi bi-star starstar"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No data was collected</p>
+        {% endif %}
+    </div>
+
+</div>
+
+{% endblock %}
