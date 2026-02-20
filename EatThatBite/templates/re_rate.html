@@ -1,15 +1,65 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    
-    <h2>Rediģēt vārdu: </h2>
-    <form action="" method="post">
-        <input type="text" name="name" value="{{ name }}" required>
-        <button type="submit">Saglabāt</button>
+
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+        <!-- Logo -->
+        <div class="logo1">
+            <img src="../static/logo_short.png" alt="Logo">
+        </div>
+
+        <!-- Hamburger toggler (always visible) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu items -->
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('rateit') }}">Rate the foods!</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('show_names') }}">See your ratings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('stats') }}">Statistics</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+
+
+
+<div class="rate-card">
+    <h2>Edit the rating</h2>
+
+    <form action="/rediget/{{ food_id }}" method="post">
+        <img src="{{ food_image }}" alt="Image of the food">
+        <h3>{{ food_name }}</h3>
+
+        <!-- Hidden input for food_id -->
+        <input type="hidden" name="food_id" value="{{ food_id }}">
+
+        <div class="mb-3">
+            <div class="star-rating">
+                {% for i in range(5, 0, -1) %}
+                <input type="radio" name="rating" value="{{ i }}" id="star{{ i }}" required>
+                <label for="star{{ i }}">
+                    <i class="bi bi-star-fill"></i>
+                </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <button type="submit">Re-rate it!</button>
     </form>
-
-    <br>
-
-    <a href="/vardi">Atpakaļ uz sarakstu</a>
+</div>
 
 {% endblock %}
